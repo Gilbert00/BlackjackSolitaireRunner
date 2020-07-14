@@ -106,7 +106,7 @@ class Ceils{
     };
     
     boolean setCeil(short ind, CardPlay card) {
-        if (isEmpty(ind)) {
+        if (isEmptyCeil(ind)) {
             ceils[ind] = card;
             return true;
         }
@@ -141,7 +141,7 @@ class Ceils{
         return count;
     }
     
-    private boolean isEmpty(short ind) {
+    private boolean isEmptyCeil(short ind) {
         return ceils[ind].point == EMPTY;
     };
     
