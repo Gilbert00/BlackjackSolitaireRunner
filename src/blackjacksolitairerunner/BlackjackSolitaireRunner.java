@@ -238,7 +238,7 @@ class BlackjackSolitaire {
                 outField();
                 outGarbage();
                 int sum = calcResult(workerCeils);
-                outPoints(sum);
+                outMarks(sum);
                 break;
             }
             
@@ -341,8 +341,8 @@ class BlackjackSolitaire {
         System.out.println("Game over");
     }
     
-    void outPoints(int points) {
-        System.out.println("Final score: " + points);        
+    void outMarks(int marks) {
+        System.out.println("Final score: " + marks);        
     }
     
     int calcResult(Ceils workerCeils) {
