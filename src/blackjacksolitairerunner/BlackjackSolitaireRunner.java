@@ -61,6 +61,7 @@ class Pack {
         }
     };
 */
+// Исходное заполнение колоды карт    
     private void initInitialPack() {
         for (short i=0; i<COLORS_LEN; i++) {
            for (short j=0; j<FACES_LEN; j++) {
@@ -69,6 +70,7 @@ class Pack {
         }
     };
     
+// Является ли карта тузом?    
     static boolean isAce(Card card) {
         return card.face.equals(FACES[0]);
     }
@@ -77,6 +79,7 @@ class Pack {
         this.initialPack = new ArrayList<CardPlay>();
         initInitialPack();  
         pack = (ArrayList<CardPlay>) initialPack.clone();
+        // Тасуем колоду
         Collections.shuffle(pack);
     }
 
@@ -114,7 +117,8 @@ class Ceils{
             return false;
         }
     };
-    
+
+// Проверка, заполнен ли полностью игровой массив    
     boolean isCeilsFull() {
         boolean flag = true;
         short len = (short)ceils.length;
@@ -129,6 +133,7 @@ class Ceils{
         return flag;
     }
 
+// Подсчет пустых ячеек в игровом массиве    
     short freeCeils() {
         short count = 0;
         short len = (short)ceils.length;
@@ -140,11 +145,13 @@ class Ceils{
         }
         return count;
     }
-    
+
+// Является ли ячейка пустой?   
     private boolean isEmptyCeil(short ind) {
         return ceils[ind].point == EMPTY;
     };
-    
+
+// Длина игрового массива    
     int lenCeils() {
         return ceils.length;
     }
@@ -187,6 +194,7 @@ class Field {
 */
     }
 
+// Заполение игрового поля    
     void setField(Ceils ceils) {
     //    int len = ceils.lenCeils();
         short k = 0;
@@ -228,7 +236,8 @@ class BlackjackSolitaire {
         workerCeils = new Ceils(WORKER_LEN);
         fieldBJG = new Field();
     }
-    
+
+// Основной цикл игры    
     void play(){
         CardPlay card;
         
@@ -250,7 +259,8 @@ class BlackjackSolitaire {
             }
         }
     }
-    
+
+// Вывод игровых сообщений и запрос места текущей карты    
     boolean confirmationCard(CardPlay card) {
         
         fieldBJG.setField(workerCeils);
@@ -276,6 +286,7 @@ class BlackjackSolitaire {
 //        return false;
     }
 
+// Ввод и анализ места текущей карты    
     int GetCeilInd(CardPlay card) {
         short inp;
         short ind;
@@ -314,6 +325,7 @@ class BlackjackSolitaire {
 //        return inp-1;
     };
 
+// Вывод игрового поля    
     void outField() {
         for (int i=0; i<Field.ROWS; i++) {
             for (int j=0; j<Field.COLS; j++) {
@@ -322,12 +334,14 @@ class BlackjackSolitaire {
             System.out.println("");
         }    
     }
-    
+
+// Вывод сообщения о подвале    
     void outGarbage() {
         int len = garbageCeils.lenCeils();
         System.out.println("Free slots on discard pile:"+ (short)len);    
     }
-    
+
+// Вывод запроса о текущей карте    
     void outCard(CardPlay card){
         String s = "";
         for (int i = 0; i < 40; i++) {
@@ -336,15 +350,18 @@ class BlackjackSolitaire {
         System.out.println(s);
         System.out.print("Current card is " + card.toString() + "; where do you want to place it? ");
     }
-    
+
+// Вывод сообщения о конце игры    
     void breakMessage() {
         System.out.println("Game over");
     }
-    
+
+// Вывод сообщения о счете игры    
     void outMarks(int marks) {
         System.out.println("Final score: " + marks);        
     }
-    
+
+// Подсчет баллов игры    
     int calcResult(Ceils workerCeils) {
         int sum = 0;
         for (int[] inds: IND_CALC) {
@@ -357,10 +374,12 @@ class BlackjackSolitaire {
         return sum;
     }
 
+// Баллы одной линии    
     int markOfLine(Ceils workerCeils, int[] inds){
         return pointToMark(pointsOfLine(workerCeils, inds));       
     }
-    
+
+// Очки одной линии    
     int pointsOfLine(Ceils workerCeils, int[] inds) {
         final int CRIT_VAL = 11;
         CardPlay card;
@@ -378,7 +397,8 @@ class BlackjackSolitaire {
 
         return sum;
     }
-    
+
+// Пересчет очков в баллы    
     int pointToMark(int point) {
         if (point==21) {return 7;}
         else if (point==20) {return 5;}
@@ -389,6 +409,7 @@ class BlackjackSolitaire {
         else {return 0;}
     }
 
+// Подсет баллов для Blackjack    
     int calcBlackjackMark(Ceils workerCeils, int[] inds) {
         for (short i=0; i<2; i++) {
             CardPlay card0 = workerCeils.getCeil((short) inds[i]);
