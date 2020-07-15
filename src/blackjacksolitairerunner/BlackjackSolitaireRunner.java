@@ -10,7 +10,8 @@ import java.util.*;
 
 /**
  *
- * @author Kemper
+ * @author Kemper F.M. 
+ * @version 0.5.2
  */
 // Карта
 class Card {
@@ -308,7 +309,7 @@ class BlackjackSolitaire {
                         System.out.println("Already occupied by " + oldCard.toString() + ".  Pick another place.");                        
                         outCard(card);
                     }
-                } else {
+                } else {  // Garbage
                     ind = (short) (inp - 1 - WORKER_LEN); 
                     if (garbageCeils.setCeil(ind, card)) {
                         return inp-1;                        
@@ -337,7 +338,7 @@ class BlackjackSolitaire {
 
 // Вывод сообщения о подвале    
     void outGarbage() {
-        int len = garbageCeils.lenCeils();
+        int len = garbageCeils.freeCeils();
         System.out.println("Free slots on discard pile:"+ (short)len);    
     }
 
@@ -415,7 +416,9 @@ class BlackjackSolitaire {
             CardPlay card0 = workerCeils.getCeil((short) inds[i]);
             CardPlay card1 = workerCeils.getCeil((short) inds[(short)(1-i)]);
             if (Pack.isAce(card0) && (card1.point==10) && ! Pack.isAce(card1))
-                return 10;
+                {return 10;}
+            else 
+                {return markOfLine(workerCeils, inds);}
         }
         return 0;
     }
