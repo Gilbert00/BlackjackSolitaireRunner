@@ -10,11 +10,12 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.5.3
+ * @version 0.5.4
  */
+
 /**
 * Карта
-* */
+*/
 class Card {
     String face;
     char color;
