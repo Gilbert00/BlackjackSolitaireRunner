@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.6.2
+ * @version 0.6.3
  */
 
 /**
@@ -226,13 +226,13 @@ class BlackjackSolitaire {
     Pack pack;
     Ceils garbageCeils;
     Ceils workerCeils;
-    Field fieldBJG;
+    Field fieldBJS;
     
     BlackjackSolitaire() {
         pack = new Pack();
         garbageCeils = new Ceils(GARBAGE_LEN);
         workerCeils = new Ceils(WORKER_LEN);
-        fieldBJG = new Field();
+        fieldBJS = new Field();
     }
 
 /**    
@@ -243,7 +243,7 @@ class BlackjackSolitaire {
         
         for (short i=0; i<=PLAY_LEN; i++) {
             if (i >= WORKER_LEN && workerCeils.isCeilsFull()) {
-                fieldBJG.setField(workerCeils);
+                fieldBJS.setField(workerCeils);
                 outField();
                 outGarbage();
                 int sum = calcResult(workerCeils);
@@ -265,7 +265,7 @@ class BlackjackSolitaire {
 */
     boolean confirmationCard(CardPlay card) {
         
-        fieldBJG.setField(workerCeils);
+        fieldBJS.setField(workerCeils);
         outField();
         outGarbage();
         outCard(card);
@@ -320,7 +320,7 @@ class BlackjackSolitaire {
     void outField() {
         for (int i=0; i<Field.ROWS; i++) {
             for (int j=0; j<Field.COLS; j++) {
-                System.out.printf("%-8s", fieldBJG.field[i][j].toString());    
+                System.out.printf("%-8s", fieldBJS.field[i][j].toString());    
             }
             System.out.println("");
         }    
