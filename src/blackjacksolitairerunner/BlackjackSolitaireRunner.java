@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.5.4
+ * @version 0.6.0
  */
 
 /**
@@ -153,7 +153,7 @@ class Ceils{
 /**    
 * Является ли ячейка пустой?   
 */
-    private boolean isEmptyCeil(short ind) {
+    boolean isEmptyCeil(short ind) {
         return ceils[ind].point == EMPTY;
     };
 
@@ -327,11 +327,22 @@ class BlackjackSolitaire {
     }
 
 /**    
-* Вывод сообщения о подвале    
+* Вывод подвала    
 */
     void outGarbage() {
-        int len = garbageCeils.freeCeils();
-        System.out.println("Free slots on discard pile:"+ (short)len);    
+//        int len = garbageCeils.freeCeils();
+        int len = garbageCeils.lenCeils();
+        short place = WORKER_LEN;
+        System.out.print("Discard pile: ");
+        for (int i=0; i<len; i++) {
+            place++;
+            if (garbageCeils.isEmptyCeil((short) i))
+                {System.out.printf("%-4d", place);}
+            else
+                {System.out.printf("%-418s", garbageCeils.getCeil((short) i).toString());}
+        }
+        System.out.println();
+//        System.out.println("Free slots on discard pile:"+ (short)len);    
     }
 
 /**
