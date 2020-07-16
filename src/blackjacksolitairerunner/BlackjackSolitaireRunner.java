@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.6.1
+ * @version 0.6.2
  */
 
 /**
@@ -287,7 +287,7 @@ class BlackjackSolitaire {
             if (sc.hasNextShort()) {
                 inp = sc.nextShort();
                 if (inp<1 || inp>SUM_LEN) {
-                    System.out.println("Value must be between 1 nad " + SUM_LEN +"inclusive");
+                    System.out.println("Value must be between 1 and " + SUM_LEN +"inclusive");
                     outCard(card);
                 } else if (inp<=WORKER_LEN) {
                     ind = (short) (inp-1);
