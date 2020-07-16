@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.6.0
+ * @version 0.6.1
  */
 
 /**
@@ -330,7 +330,6 @@ class BlackjackSolitaire {
 * Вывод подвала    
 */
     void outGarbage() {
-//        int len = garbageCeils.freeCeils();
         int len = garbageCeils.lenCeils();
         short place = WORKER_LEN;
         System.out.print("Discard pile: ");
@@ -342,7 +341,6 @@ class BlackjackSolitaire {
                 {System.out.printf("%-418s", garbageCeils.getCeil((short) i).toString());}
         }
         System.out.println();
-//        System.out.println("Free slots on discard pile:"+ (short)len);    
     }
 
 /**
@@ -428,7 +426,7 @@ class BlackjackSolitaire {
     }
 
 /**    
-* Подсет баллов для Blackjack    
+* Подсчет баллов для Blackjack    
 */
     int calcBlackjackMark(Ceils workerCeils, int[] inds) {
         for (short i=0; i<2; i++) {
