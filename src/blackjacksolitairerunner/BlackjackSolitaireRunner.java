@@ -30,7 +30,7 @@ class Card {
         return face;
     }
     
-    char getChar() {
+    char getColor() {
         return color;
     }
     
