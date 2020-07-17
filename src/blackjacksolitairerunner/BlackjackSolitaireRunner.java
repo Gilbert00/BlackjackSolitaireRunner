@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.7.4
+ * @version 0.7.5
  */
 
 /**
@@ -344,8 +344,8 @@ class BlackjackSolitaire {
         for (short i=0; i<=PLAY_LEN; i++) {
             if (i >= WORKER_LEN && workerCeils.isCeilsFull()) {
                 fieldBJS.setField(workerCeils);
-                outField();
-                outGarbage();
+                outField(fieldBJS);
+                outGarbage(garbageCeils);
                 int sum = calc.calcResult(workerCeils);
                 outMarks(sum);
                 break;
@@ -366,8 +366,8 @@ class BlackjackSolitaire {
     boolean confirmationCard(CardPlay card) {
         
         fieldBJS.setField(workerCeils);
-        outField();
-        outGarbage();
+        outField(fieldBJS);
+        outGarbage(garbageCeils);
         outCard(card);
         
         int ind = getCeilInd(card);
@@ -417,7 +417,7 @@ class BlackjackSolitaire {
 /**    
 * Вывод игрового поля    
 */
-    void outField() {
+    void outField(Field fieldBJS) {
         for (int i=0; i<Field.ROWS; i++) {
             for (int j=0; j<Field.COLS; j++) {
                 System.out.printf("%-8s", fieldBJS.getField(i, j).toString());    
@@ -429,7 +429,7 @@ class BlackjackSolitaire {
 /**    
 * Вывод подвала    
 */
-    void outGarbage() {
+    void outGarbage(Ceils garbageCeils) {
         int len = garbageCeils.lenCeils();
         short place = WORKER_LEN;
         System.out.print("Discard pile: ");
