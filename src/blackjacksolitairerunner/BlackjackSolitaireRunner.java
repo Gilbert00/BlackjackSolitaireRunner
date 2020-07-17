@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.7.3
+ * @version 0.7.4
  */
 
 /**
@@ -370,14 +370,14 @@ class BlackjackSolitaire {
         outGarbage();
         outCard(card);
         
-        int ind = GetCeilInd(card);
+        int ind = getCeilInd(card);
         return (ind >= 0);
     }
 
 /**    
 * Ввод и анализ места текущей карты    
 */
-    int GetCeilInd(CardPlay card) {
+    int getCeilInd(CardPlay card) {
         short inp;
         short ind;
         Scanner sc = new Scanner(System.in);
