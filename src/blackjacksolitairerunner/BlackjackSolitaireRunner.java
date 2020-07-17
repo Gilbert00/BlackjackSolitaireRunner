@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.7.2
+ * @version 0.7.3
  */
 
 /**
@@ -28,6 +28,10 @@ class Card {
     
     String getFace(){
         return face;
+    }
+    
+    char getChar() {
+        return color;
     }
     
     @Override
