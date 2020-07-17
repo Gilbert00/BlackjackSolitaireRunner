@@ -10,11 +10,12 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.6.4
+ * @version 0.7.0
  */
 
 /**
 * Карта
+* @author Kemper F.M. 
 */
 class Card {
     String face;
@@ -47,6 +48,7 @@ class CardPlay extends Card {
 
 /**
 * Колода карт
+* @author Kemper F.M.  
 */
 class Pack {
     final static String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -91,6 +93,7 @@ class Pack {
 
 /**
 * Игровой массив
+* @author Kemper F.M.  
 */
 class Ceils{
     private final static short EMPTY = -1;
@@ -167,6 +170,7 @@ class Ceils{
 
 /**
 * Матрица игрового поля
+* @author Kemper F.M.  
 */
 class Field {
     final static short ROWS = 4;
@@ -175,7 +179,7 @@ class Field {
     final static int[] LOW_ROWS = {2, 3};
 
     private CardPlay cardNone;
-    protected CardPlay[][] field;
+    private CardPlay[][] field;
     
     Field() {
         cardNone = new CardPlay(" ", ' ', (short)0);
@@ -216,16 +220,96 @@ class Field {
 }
 
 /**
+ * Рассчет баллов игры в BlackJack
+ * @author Kemper F.M.
+ */
+class CalcPlayBJ{ 
+    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
+                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
+    final static int[][] IND_BJ = {{0,5}, {4,9}};
+    
+/**    
+* Подсчет баллов игры    
+*/
+    int calcResult(Ceils workerCeils) {
+        int sum = 0;
+        for (int[] inds: IND_CALC) {
+            sum += markOfLine(workerCeils, inds);        
+        }
+        
+        for (int[] inds: IND_BJ) {
+            sum += calcBlackjackMark(workerCeils, inds);
+        }
+        return sum;
+    }
+
+/**    
+* Баллы одной линии    
+*/
+    private int markOfLine(Ceils workerCeils, int[] inds){
+        return pointToMark(pointsOfLine(workerCeils, inds));       
+    }
+
+/**    
+* Очки одной линии    
+*/
+    private int pointsOfLine(Ceils workerCeils, int[] inds) {
+        final int CRIT_VAL = 11;
+        CardPlay card;
+        int sum = 0;
+        boolean existAce = false;
+
+        for (int ind: inds) {
+            card = workerCeils.getCeil((short) ind);
+            existAce |= Pack.isAce(card);
+            sum += card.point;
+        }
+        
+        if (existAce)
+            sum = sum <= CRIT_VAL ? sum+10 : sum;
+
+        return sum;
+    }
+
+/**
+* Пересчет очков в баллы    
+*/
+    private int pointToMark(int point) {
+        if (point==21) {return 7;}
+        else if (point==20) {return 5;}
+        else if (point==19) {return 4;}
+        else if (point==18) {return 3;}
+        else if (point==17) {return 2;}
+        else if (point<=16) {return 1;}
+        else {return 0;}
+    }
+
+/**    
+* Подсчет баллов для Blackjack    
+*/
+    private int calcBlackjackMark(Ceils workerCeils, int[] inds) {
+        for (short i=0; i<2; i++) {
+            CardPlay card0 = workerCeils.getCeil((short) inds[i]);
+            CardPlay card1 = workerCeils.getCeil((short) inds[(short)(1-i)]);
+            if (Pack.isAce(card0) && (card1.point==10) && ! Pack.isAce(card1))
+                {return 10;}
+            else 
+                {return markOfLine(workerCeils, inds);}
+        }
+        return 0;
+    }
+    
+}
+
+/**
 * Управление игрой
+* @author Kemper F.M.  
 */
 class BlackjackSolitaire {
     final static short GARBAGE_LEN = 4;
     final static short WORKER_LEN = 16;
     final static short PLAY_LEN = WORKER_LEN + GARBAGE_LEN;
     final static short SUM_LEN =  WORKER_LEN + GARBAGE_LEN;
-    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
-                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
-    final static int[][] IND_BJ = {{0,5}, {4,9}};
     
     Pack pack;
     Ceils garbageCeils;
@@ -244,13 +328,14 @@ class BlackjackSolitaire {
 */
     void play(){
         CardPlay card;
+        CalcPlayBJ calc = new CalcPlayBJ();
         
         for (short i=0; i<=PLAY_LEN; i++) {
             if (i >= WORKER_LEN && workerCeils.isCeilsFull()) {
                 fieldBJS.setField(workerCeils);
                 outField();
                 outGarbage();
-                int sum = calcResult(workerCeils);
+                int sum = calc.calcResult(workerCeils);
                 outMarks(sum);
                 break;
             }
@@ -373,76 +458,6 @@ class BlackjackSolitaire {
         System.out.println("Final score: " + marks);        
     }
 
-/**    
-* Подсчет баллов игры    
-*/
-    int calcResult(Ceils workerCeils) {
-        int sum = 0;
-        for (int[] inds: IND_CALC) {
-            sum += markOfLine(workerCeils, inds);        
-        }
-        
-        for (int[] inds: IND_BJ) {
-            sum += calcBlackjackMark(workerCeils, inds);
-        }
-        return sum;
-    }
-
-/**    
-* Баллы одной линии    
-*/
-    int markOfLine(Ceils workerCeils, int[] inds){
-        return pointToMark(pointsOfLine(workerCeils, inds));       
-    }
-
-/**    
-* Очки одной линии    
-*/
-    int pointsOfLine(Ceils workerCeils, int[] inds) {
-        final int CRIT_VAL = 11;
-        CardPlay card;
-        int sum = 0;
-        boolean existAce = false;
-
-        for (int ind: inds) {
-            card = workerCeils.getCeil((short) ind);
-            existAce |= Pack.isAce(card);
-            sum += card.point;
-        }
-        
-        if (existAce)
-            sum = sum <= CRIT_VAL ? sum+10 : sum;
-
-        return sum;
-    }
-
-/**
-* Пересчет очков в баллы    
-*/
-    int pointToMark(int point) {
-        if (point==21) {return 7;}
-        else if (point==20) {return 5;}
-        else if (point==19) {return 4;}
-        else if (point==18) {return 3;}
-        else if (point==17) {return 2;}
-        else if (point<=16) {return 1;}
-        else {return 0;}
-    }
-
-/**    
-* Подсчет баллов для Blackjack    
-*/
-    int calcBlackjackMark(Ceils workerCeils, int[] inds) {
-        for (short i=0; i<2; i++) {
-            CardPlay card0 = workerCeils.getCeil((short) inds[i]);
-            CardPlay card1 = workerCeils.getCeil((short) inds[(short)(1-i)]);
-            if (Pack.isAce(card0) && (card1.point==10) && ! Pack.isAce(card1))
-                {return 10;}
-            else 
-                {return markOfLine(workerCeils, inds);}
-        }
-        return 0;
-    }
 
 }    
 
