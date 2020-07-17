@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.7.1
+ * @version 0.7.2
  */
 
 /**
@@ -18,12 +18,16 @@ import java.util.*;
 * @author Kemper F.M. 
 */
 class Card {
-    String face;
-    char color;
+    private String face;
+    private char color;
     
     Card (String face, char color) {
         this.face = face;
         this.color = color;
+    }
+    
+    String getFace(){
+        return face;
     }
     
     @Override
@@ -78,7 +82,7 @@ class Pack {
 *Является ли карта тузом?    
 */
     static boolean isAce(Card card) {
-        return card.face.equals(FACES[0]);
+        return card.getFace().equals(FACES[0]);
     }
 
     Pack() {
