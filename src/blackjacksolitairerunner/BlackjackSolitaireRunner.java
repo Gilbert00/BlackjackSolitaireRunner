@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.6.3
+ * @version 0.6.4
  */
 
 /**
@@ -174,8 +174,8 @@ class Field {
     final static int[] BIG_ROWS = {0, 1};
     final static int[] LOW_ROWS = {2, 3};
 
-    CardPlay cardNone;
-    CardPlay[][] field;
+    private CardPlay cardNone;
+    protected CardPlay[][] field;
     
     Field() {
         cardNone = new CardPlay(" ", ' ', (short)0);
@@ -189,6 +189,10 @@ class Field {
         }
     }
 
+    CardPlay getField(int i, int j) {
+        return field[i][j];
+    }
+    
 /**
 * Заполение игрового поля    
 */
@@ -320,7 +324,7 @@ class BlackjackSolitaire {
     void outField() {
         for (int i=0; i<Field.ROWS; i++) {
             for (int j=0; j<Field.COLS; j++) {
-                System.out.printf("%-8s", fieldBJS.field[i][j].toString());    
+                System.out.printf("%-8s", fieldBJS.getField(i, j).toString());    
             }
             System.out.println("");
         }    
