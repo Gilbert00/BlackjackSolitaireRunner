@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.7.0
+ * @version 0.7.1
  */
 
 /**
@@ -37,13 +37,16 @@ class Card {
 * Карта с очками
 */
 class CardPlay extends Card {
-    short point;
+    private short point;
     
     CardPlay(String face, char color, short point){
         super(face, color);
         this.point = point;
     }
     
+    short getPoint() {
+        return this.point;
+    }
 }
 
 /**
@@ -129,7 +132,7 @@ class Ceils{
         short len = (short)ceils.length;
         
         for (short i=0; i < len; i++) { 
-            if (EMPTY == ceils[i].point) {
+            if (EMPTY == ceils[i].getPoint()) {
                 flag = false;
                 break;
             }
@@ -146,7 +149,7 @@ class Ceils{
         short len = (short)ceils.length;
 
         for (short i=0; i < len; i++) { 
-            if (EMPTY == ceils[i].point) {
+            if (EMPTY == ceils[i].getPoint()) {
                 count++;
             }
         }
@@ -157,7 +160,7 @@ class Ceils{
 * Является ли ячейка пустой?   
 */
     boolean isEmptyCeil(short ind) {
-        return ceils[ind].point == EMPTY;
+        return ceils[ind].getPoint() == EMPTY;
     };
 
 /**    
@@ -262,7 +265,7 @@ class CalcPlayBJ{
         for (int ind: inds) {
             card = workerCeils.getCeil((short) ind);
             existAce |= Pack.isAce(card);
-            sum += card.point;
+            sum += card.getPoint();
         }
         
         if (existAce)
@@ -291,7 +294,7 @@ class CalcPlayBJ{
         for (short i=0; i<2; i++) {
             CardPlay card0 = workerCeils.getCeil((short) inds[i]);
             CardPlay card1 = workerCeils.getCeil((short) inds[(short)(1-i)]);
-            if (Pack.isAce(card0) && (card1.point==10) && ! Pack.isAce(card1))
+            if (Pack.isAce(card0) && (card1.getPoint()==10) && ! Pack.isAce(card1))
                 {return 10;}
             else 
                 {return markOfLine(workerCeils, inds);}
