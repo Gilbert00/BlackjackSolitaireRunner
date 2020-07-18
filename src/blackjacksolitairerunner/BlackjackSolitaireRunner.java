@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.7.5
+ * @version 0.8.0
  */
 
 /**
@@ -313,71 +313,15 @@ class CalcPlayBJ{
 }
 
 /**
-* Управление игрой
-* @author Kemper F.M.  
-*/
-class BlackjackSolitaire {
-    final static short GARBAGE_LEN = 4;
-    final static short WORKER_LEN = 16;
-    final static short PLAY_LEN = WORKER_LEN + GARBAGE_LEN;
-    final static short SUM_LEN =  WORKER_LEN + GARBAGE_LEN;
-    
-    Pack pack;
-    Ceils garbageCeils;
-    Ceils workerCeils;
-    Field fieldBJS;
-    
-    BlackjackSolitaire() {
-        pack = new Pack();
-        garbageCeils = new Ceils(GARBAGE_LEN);
-        workerCeils = new Ceils(WORKER_LEN);
-        fieldBJS = new Field();
-    }
-
-/**    
-* Основной цикл игры    
-*/
-    void play(){
-        CardPlay card;
-        CalcPlayBJ calc = new CalcPlayBJ();
-        
-        for (short i=0; i<=PLAY_LEN; i++) {
-            if (i >= WORKER_LEN && workerCeils.isCeilsFull()) {
-                fieldBJS.setField(workerCeils);
-                outField(fieldBJS);
-                outGarbage(garbageCeils);
-                int sum = calc.calcResult(workerCeils);
-                outMarks(sum);
-                break;
-            }
-            
-            card = pack.getCard(i);
-            
-            if (! confirmationCard(card)) {
-                breakMessage();
-                break;
-            }
-        }
-    }
-
-/**    
-* Вывод игровых сообщений и запрос места текущей карты    
-*/
-    boolean confirmationCard(CardPlay card) {
-        
-        fieldBJS.setField(workerCeils);
-        outField(fieldBJS);
-        outGarbage(garbageCeils);
-        outCard(card);
-        
-        int ind = getCeilInd(card);
-        return (ind >= 0);
-    }
+ * Игровой стол
+ * @author Kemper F.M.
+ */
+class PlayDesk {
 
 /**    
 * Ввод и анализ места текущей карты    
 */
-    int getCeilInd(CardPlay card) {
+    int getCeilInd(CardPlay card, Ceils workerCeils, Ceils garbageCeils, short workerLen, short sumLen) {
         short inp;
         short ind;
         Scanner sc = new Scanner(System.in);
@@ -386,10 +330,10 @@ class BlackjackSolitaire {
         do {
             if (sc.hasNextShort()) {
                 inp = sc.nextShort();
-                if (inp<1 || inp>SUM_LEN) {
-                    System.out.println("Value must be between 1 and " + SUM_LEN +"inclusive");
+                if (inp<1 || inp>sumLen) {
+                    System.out.println("Value must be between 1 and " + sumLen +"inclusive");
                     outCard(card);
-                } else if (inp<=WORKER_LEN) {
+                } else if (inp<=workerLen) {
                     ind = (short) (inp-1);
                     if (workerCeils.setCeil(ind, card)) {
                         return ind;
@@ -399,7 +343,7 @@ class BlackjackSolitaire {
                         outCard(card);
                     }
                 } else {  // Garbage
-                    ind = (short) (inp - 1 - WORKER_LEN); 
+                    ind = (short) (inp - 1 - workerLen); 
                     if (garbageCeils.setCeil(ind, card)) {
                         return inp-1;                        
                     }else{
@@ -429,16 +373,16 @@ class BlackjackSolitaire {
 /**    
 * Вывод подвала    
 */
-    void outGarbage(Ceils garbageCeils) {
+    void outGarbage(Ceils garbageCeils, short base) {
         int len = garbageCeils.lenCeils();
-        short place = WORKER_LEN;
+        short place = base;
         System.out.print("Discard pile: ");
         for (int i=0; i<len; i++) {
             place++;
             if (garbageCeils.isEmptyCeil((short) i))
                 {System.out.printf("%-4d", place);}
             else
-                {System.out.printf("%-418s", garbageCeils.getCeil((short) i).toString());}
+                {System.out.printf("%-4s", garbageCeils.getCeil((short) i).toString());}
         }
         System.out.println();
     }
@@ -468,7 +412,72 @@ class BlackjackSolitaire {
     void outMarks(int marks) {
         System.out.println("Final score: " + marks);        
     }
+    
+}
 
+/**
+* Управление игрой
+* @author Kemper F.M.  
+*/
+class BlackjackSolitaire {
+    final static short GARBAGE_LEN = 4;
+    final static short WORKER_LEN = 16;
+    final static short PLAY_LEN = WORKER_LEN + GARBAGE_LEN;
+    final static short SUM_LEN =  WORKER_LEN + GARBAGE_LEN;
+    
+    Pack pack;
+    Ceils garbageCeils;
+    Ceils workerCeils;
+    Field fieldBJS;
+    PlayDesk playDesk;
+    
+    BlackjackSolitaire() {
+        pack = new Pack();
+        garbageCeils = new Ceils(GARBAGE_LEN);
+        workerCeils = new Ceils(WORKER_LEN);
+        fieldBJS = new Field();
+        playDesk = new PlayDesk();
+    }
+
+/**    
+* Основной цикл игры    
+*/
+    void play(){
+        CardPlay card;
+        CalcPlayBJ calc = new CalcPlayBJ();
+                
+        for (short i=0; i<=PLAY_LEN; i++) {
+            if (i >= WORKER_LEN && workerCeils.isCeilsFull()) {
+                fieldBJS.setField(workerCeils);
+                playDesk.outField(fieldBJS);
+                playDesk.outGarbage(garbageCeils, WORKER_LEN);
+                int sum = calc.calcResult(workerCeils);
+                playDesk.outMarks(sum);
+                break;
+            }
+            
+            card = pack.getCard(i);
+            
+            if (! confirmationCard(card)) {
+                playDesk.breakMessage();
+                break;
+            }
+        }
+    }
+
+/**    
+* Вывод игровых сообщений и запрос места текущей карты    
+*/
+    boolean confirmationCard(CardPlay card) {
+        
+        fieldBJS.setField(workerCeils);
+        playDesk.outField(fieldBJS);
+        playDesk.outGarbage(garbageCeils, WORKER_LEN);
+        playDesk.outCard(card);
+        
+        int ind = playDesk.getCeilInd(card, workerCeils, garbageCeils, WORKER_LEN, SUM_LEN);
+        return (ind >= 0);
+    }
 
 }    
 
