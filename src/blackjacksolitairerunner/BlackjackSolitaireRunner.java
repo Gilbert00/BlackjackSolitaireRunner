@@ -4,14 +4,13 @@
  * and open the template in the editor.
  */
 
+/**
+ * @author Kemper F.M. 
+ * @version 0.8.2
+ */
 package blackjacksolitairerunner;
 
 import java.util.*;
-
-/**
- * @author Kemper F.M. 
- * @version 0.8.1
- */
 
 /**
 * Карта
@@ -43,6 +42,7 @@ class Card {
 
 /**
 * Карта с очками
+* @author Kemper F.M. 
 */
 class CardPlay extends Card {
     private short point;
