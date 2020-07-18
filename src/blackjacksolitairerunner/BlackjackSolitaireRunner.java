@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * @author Kemper F.M. 
- * @version 0.8.0
+ * @version 0.8.1
  */
 
 /**
@@ -468,7 +468,7 @@ class BlackjackSolitaire {
 /**    
 * Вывод игровых сообщений и запрос места текущей карты    
 */
-    boolean confirmationCard(CardPlay card) {
+    private boolean confirmationCard(CardPlay card) {
         
         fieldBJS.setField(workerCeils);
         playDesk.outField(fieldBJS);
