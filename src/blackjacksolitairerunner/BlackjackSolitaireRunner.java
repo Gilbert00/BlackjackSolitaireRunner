@@ -6,7 +6,7 @@
 
 /**
  * @author Kemper F.M. 
- * @version 0.8.2
+ * @version 0.9.0
  */
 package blackjacksolitairerunner;
 
@@ -195,8 +195,8 @@ class Field {
     Field() {
         cardNone = new CardPlay(" ", ' ', (short)0);
         field = new CardPlay[ROWS][COLS];
-        int[] noneRows = {2, 3};
-        int[] noneCols = {0, 4};
+        int[] noneRows = LOW_ROWS;
+        int[] noneCols = {0, COLS-1};
         for (int i: noneRows) {
             for (int j: noneCols) {
                 field[i][j] = cardNone;
@@ -235,25 +235,96 @@ class Field {
  * @author Kemper F.M.
  */
 class CalcPlayBJ{ 
-    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
-                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
-    final static int[][] IND_BJ = {{0,5}, {4,9}};
-    
+//    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
+//                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
+//    final static int[][] IND_BJ = {{0,5}, {4,9}};
+    int[][] indCalc;
+    int[][] indBj;
 /**    
 * Подсчет баллов игры    
 */
     int calcResult(Ceils workerCeils) {
+        genLinesInds(Field.ROWS, Field.COLS, Field.LOW_ROWS.length);
         int sum = 0;
-        for (int[] inds: IND_CALC) {
+        for (int[] inds: indCalc) {
             sum += markOfLine(workerCeils, inds);        
         }
         
-        for (int[] inds: IND_BJ) {
+        for (int[] inds: indBj) {
             sum += calcBlackjackMark(workerCeils, inds);
         }
         return sum;
     }
 
+/**
+ * генерация массивов индексов линий
+ */    
+    private void genLinesInds(int rows, int cols, int lowRows) {
+//        int rows = Field.ROWS;
+//        int cols = Field.COLS;
+//        int lowRows = Field.LOW_ROWS.length;
+        int bigRows = rows - lowRows;
+        int[] colsBj = {0, cols-1}; 
+        int lenColsBj = colsBj.length;
+        int lowCols = cols - lenColsBj;
+        int lenCalc = rows + lowCols;
+        indCalc = new int[lenCalc][];
+        indBj = new int[lenColsBj][];
+//Big rows
+        int k = 0;        
+        int ind = 0;
+        for (int i=0; i<bigRows; i++) {
+            int[] row = new int[cols];
+            for (int j=0; j<cols; j++) {
+                row[j] = ind;
+                ind++;
+            }
+            indCalc[k] = row;
+            k++;
+        }
+//Low rows
+        for (int i=0; i<lowRows; i++) {
+            int[] row = new int[lowCols];
+            for (int j=0; j<lowCols; j++) {
+                row[j] = ind;
+                ind++;
+            }
+            indCalc[k] = row;
+            k++;
+        }
+//Cols
+        int delta = 0;
+        for (int i=0; i<lowCols; i++) {
+            ind = i+1;
+            int[] col = new int[rows];
+            for (int j=0; j<rows; j++) {
+                col[j] = ind;
+                if (j < bigRows-1) {
+                    delta = cols;
+                } else if (j == bigRows-1) {
+                    delta = cols-1;
+                } else {  // j >= bigRows 
+                    delta = lowCols;
+                }
+                ind += delta;
+            }    
+            indCalc[k] = col;
+            k++;
+        }
+//Bj cols        
+        k = 0;
+        for (int i: colsBj) { 
+            ind = i;
+            int[] col = new int[bigRows];
+            for (int j=0; j<bigRows; j++) {
+                col[j] = ind;
+                ind += cols;
+            }    
+            indBj[k] = col;
+            k++;
+        }
+    }
+    
 /**    
 * Баллы одной линии    
 */
