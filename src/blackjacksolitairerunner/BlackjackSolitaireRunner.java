@@ -6,7 +6,7 @@
 
 /**
  * @author Kemper F.M. 
- * @version 0.9.1
+ * @version 0.9.2
  */
 package blackjacksolitairerunner;
 
@@ -402,7 +402,7 @@ class PlayDesk {
             if (sc.hasNextShort()) {
                 inp = sc.nextShort();
                 if (inp<1 || inp>sumLen) {
-                    System.out.println("Value must be between 1 and " + sumLen +"inclusive");
+                    System.out.println("Value must be between 1 and " + sumLen +" inclusive");
                     outCard(card);
                 } else if (inp<=workerLen) {
                     ind = (short) (inp-1);
@@ -474,7 +474,7 @@ class PlayDesk {
 * Вывод сообщения о конце игры    
 */
     void breakMessage() {
-        System.out.println("Game over");
+        System.out.println("Game over!");
     }
 
 /**
