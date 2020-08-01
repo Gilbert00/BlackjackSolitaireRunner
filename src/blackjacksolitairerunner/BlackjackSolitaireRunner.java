@@ -4,10 +4,6 @@
  * and open the template in the editor.
  */
 
-/**
- * @author Kemper F.M. 
- * @version 0.9.2
- */
 package blackjacksolitairerunner;
 
 import java.util.*;
@@ -137,15 +133,13 @@ class Ceils{
 */
     boolean isCeilsFull() {
         boolean flag = true;
-        short len = (short)ceils.length;
         
-        for (short i=0; i < len; i++) { 
-            if (EMPTY == ceils[i].getPoint()) {
+        for (CardPlay card : ceils) { 
+            if (EMPTY == card.getPoint()) {
                 flag = false;
                 break;
             }
         }
-
         return flag;
     }
 
@@ -154,10 +148,9 @@ class Ceils{
 */
     short freeCeils() {
         short count = 0;
-        short len = (short)ceils.length;
 
-        for (short i=0; i < len; i++) { 
-            if (EMPTY == ceils[i].getPoint()) {
+        for (CardPlay card : ceils) { 
+            if (EMPTY == card.getPoint()) {
                 count++;
             }
         }
@@ -171,6 +164,14 @@ class Ceils{
         return ceils[ind].getPoint() == EMPTY;
     };
 
+/**    
+* Является ли ячейка пустой?   
+*/
+    boolean isEmptyCeil(CardPlay ceil) {
+        return ceil.getPoint() == EMPTY;
+    };
+
+    
 /**    
 * Длина игрового массива    
 */
@@ -225,7 +226,6 @@ class Field {
                 k++;
             }
         }
-        
     }
     
 }
