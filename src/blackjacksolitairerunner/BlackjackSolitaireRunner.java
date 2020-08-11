@@ -58,13 +58,14 @@ class CardPlay extends Card {
 * @author Kemper F.M.  
 */
 class Pack {
-    final static String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-    final static char[] COLORS = {'H', 'S', 'D', 'C'};
-    final static short[] POINTS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
-    final static short FACES_LEN = (short)FACES.length;
-    final static short COLORS_LEN = (short)COLORS.length;
-    final static short PACK_LEN = (short)(FACES_LEN * COLORS_LEN);
+    private final static String[] FACES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+    private final static char[] COLORS = {'H', 'S', 'D', 'C'};
+    private final static short[] POINTS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
+    private final static short FACES_LEN = (short)FACES.length;
+    private final static short COLORS_LEN = (short)COLORS.length;
+    private final static short PACK_LEN = (short)(FACES_LEN * COLORS_LEN);
     private ArrayList<CardPlay> initialPack;
+    //тасованная колода карт
     private ArrayList<CardPlay> pack;
 
 /**
@@ -73,7 +74,7 @@ class Pack {
     private void initInitialPack() {
         for (short i=0; i<COLORS_LEN; i++) {
            for (short j=0; j<FACES_LEN; j++) {
-                    initialPack.add(new CardPlay(FACES[j], COLORS[i], POINTS[j]) );
+                    this.initialPack.add(new CardPlay(FACES[j], COLORS[i], POINTS[j]) );
            }
         }
     };
@@ -88,13 +89,13 @@ class Pack {
     Pack() {
         this.initialPack = new ArrayList<CardPlay>();
         initInitialPack();  
-        pack = (ArrayList<CardPlay>) initialPack.clone();
+        this.pack = (ArrayList<CardPlay>) this.initialPack.clone();
         // Тасуем колоду
-        Collections.shuffle(pack);
+        Collections.shuffle(this.pack);
     }
 
     CardPlay getCard(short ind) {
-        return pack.get(ind);
+        return this.pack.get(ind);
     }
 }    
 
@@ -467,7 +468,7 @@ class PlayDesk {
             s += "*";
         }
         System.out.println(s);
-        System.out.print("Current card is " + card.toString() + "; where do you want to place it? ");
+        System.out.print("Current card is " + card + "; where do you want to place it? ");
     }
 
 /**    
