@@ -89,10 +89,10 @@ class Pack {
     Pack() {
         this.initialPack = new ArrayList<CardPlay>();
         initInitialPack();  
-        setTestPack();
-//        this.pack = (ArrayList<CardPlay>) this.initialPack.clone();
+ //       setTestPack();
+        this.pack = (ArrayList<CardPlay>) this.initialPack.clone();
         // Тасуем колоду
-//        Collections.shuffle(this.pack);
+        Collections.shuffle(this.pack);
     }
 
     CardPlay getCard(short ind) {
