@@ -89,13 +89,42 @@ class Pack {
     Pack() {
         this.initialPack = new ArrayList<CardPlay>();
         initInitialPack();  
-        this.pack = (ArrayList<CardPlay>) this.initialPack.clone();
+        setTestPack();
+//        this.pack = (ArrayList<CardPlay>) this.initialPack.clone();
         // Тасуем колоду
-        Collections.shuffle(this.pack);
+//        Collections.shuffle(this.pack);
     }
 
     CardPlay getCard(short ind) {
         return this.pack.get(ind);
+    }
+    
+    private void setTestPack() {
+        String[] testCard = {"JH","8H","5C","2C","QS","AC","3S","3D","9S","JS",
+                             "8S","4D","9C","AH","10S","8D","6H","4H","4C","AS"};
+        String face;
+        char color;
+        short point;
+        
+        this.pack = new ArrayList<CardPlay>();
+        
+        for (String card : testCard) {
+            face = card.toUpperCase().substring(0, card.length()-1);
+            color = card.toUpperCase().charAt(card.length()-1);
+            switch (face) {
+                case "A":
+                    point = 1;
+                    break;
+                case "J":
+                case "Q":
+                case "K":
+                    point = 10;
+                    break;
+                default:        
+                    point = (short)(int)Integer.parseInt(face);
+            }
+            this.pack.add(new CardPlay(face, color, point));
+        }
     }
 }    
 
@@ -236,16 +265,16 @@ class Field {
  * @author Kemper F.M.
  */
 class CalcPlayBJ{ 
-//    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
-//                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
-//    final static int[][] IND_BJ = {{0,5}, {4,9}};
-    private int[][] indCalc;
-    private int[][] indBj;
+    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
+                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
+    final static int[][] IND_BJ = {{0,5}, {4,9}};
+    private int[][] indCalc = IND_CALC;
+    private int[][] indBj = IND_BJ;
 /**    
 * Подсчет баллов игры    
 */
     int calcResult(Ceils workerCeils) {
-        genLinesInds(Field.ROWS, Field.COLS, Field.LOW_ROWS.length);
+//        genLinesInds(Field.ROWS, Field.COLS, Field.LOW_ROWS.length);
         int sum = 0;
         for (int[] inds: indCalc) {
             sum += markOfLine(workerCeils, inds);        
@@ -376,10 +405,8 @@ class CalcPlayBJ{
             CardPlay card1 = workerCeils.getCeil((short) inds[(short)(1-i)]);
             if (Pack.isAce(card0) && (card1.getPoint()==10) && ! Pack.isAce(card1))
                 {return 10;}
-            else 
-                {return markOfLine(workerCeils, inds);}
         }
-        return 0;
+        return markOfLine(workerCeils, inds);
     }
     
 }
