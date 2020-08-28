@@ -265,16 +265,16 @@ class Field {
  * @author Kemper F.M.
  */
 class CalcPlayBJ{ 
-    final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
-                                     {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
-    final static int[][] IND_BJ = {{0,5}, {4,9}};
-    private int[][] indCalc = IND_CALC;
-    private int[][] indBj = IND_BJ;
+ //   final static int[][] IND_CALC = {{0,1,2,3,4}, {5,6,7,8,9}, {10,11,12}, {13,14,15},
+ //                                    {1,6,10,13}, {2,7,11,14}, {3,8,12,15}};
+ //   final static int[][] IND_BJ = {{0,5}, {4,9}};
+    private int[][] indCalc; // = IND_CALC;
+    private int[][] indBj; // = IND_BJ;
 /**    
 * Подсчет баллов игры    
 */
     int calcResult(Ceils workerCeils) {
-//        genLinesInds(Field.ROWS, Field.COLS, Field.LOW_ROWS.length);
+        genLinesInds(Field.ROWS, Field.COLS, Field.LOW_ROWS.length);
         int sum = 0;
         for (int[] inds: indCalc) {
             sum += markOfLine(workerCeils, inds);        
